@@ -16,18 +16,45 @@ imageDatas=(function genImageURL(imageDatasArr){
 	return imageDatasArr;
 })(imageDatas);
 
+var ImgFigure = React.createClass({
+	render:function(){
+		return (
+			<figure className="img-figure">
+				<img src={this.props.data.imageURL} alt={this.props.data.title}/>
+				<figCaption>
+					<h2 className="img-title">{this.props.data.title}</h2>
+				</figCaption>
+			</figure>
+		);
+	}
+})
+
 class AppComponent extends React.Component {
   render() {
+  	let controllerUnits = [],
+    		imgFigures=[];
+
+    imageDatas.forEach(value => imgFigures.push(<ImgFigure data={value}/>));
+
     return (
-      <section className="stage">
-      	<section className="img-sec"></section>
-      	<nav className="controller-nav"></nav>
-      </section>
+      	<section className="stage">
+      		<section className="img-sec">
+      			{imgFigures}
+      		</section>
+      		<nav className="controller-nav">
+      			{controllerUnits}
+      		</nav>
+      	</section>
     );
   }
 }
 
 AppComponent.defaultProps = {
+	// controllerUnits:"[]",
+ //    imgFigures="[]",
+ //    imageDatas:function(){
+ //    	return imageDatas.foreach(value => imgFigures.push(<ImgFigure data={value}/>));
+ //    }
 };
 
 export default AppComponent;
