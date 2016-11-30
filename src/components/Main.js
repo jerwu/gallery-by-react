@@ -17,6 +17,22 @@ imageDatas=(function genImageURL(imageDatasArr){
 })(imageDatas);
 
 var ImgFigure = React.createClass({
+	constant:{
+		centerPos:{
+			left:0,
+			right:0
+		},
+		hPosRange:{		//水平方向的取值范围(左右分区)
+			leftSecX:[0,0],
+			rightSecX:[0,0],
+			y:[0,0]
+		},
+		vPosRange:{ 	//垂直方向上的取值范围(上分区)
+			x:[0,0],
+			topY:[0,0]
+		}
+	}
+
 	render:function(){
 		return (
 			<figure className="img-figure">
