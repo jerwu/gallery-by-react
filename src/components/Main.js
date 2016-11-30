@@ -220,7 +220,7 @@ class AppComponent extends React.Component {
 	    			}
 	    		}
     		}
-
+    		//在遍历或者循环输出去渲染子组件的时候，key必不可少
     		imgFigures.push(<ImgFigure key={index} data={value} ref={'imgFigure'+index} arrange={this.state.imgsArrangeArr[index]}/>)
     	}).bind(this));
 
