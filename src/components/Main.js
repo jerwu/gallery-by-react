@@ -23,6 +23,11 @@ function getRangeRandom(low,high){
 	return Math.ceil(Math.random() * (high - low) + low);
 }
 
+//获取0~30度的旋转角度值
+function get30DegRandom(){
+	return ((Math.random() > 0.5 ? '' : '') + Math.ceil(Math.random() * 30));
+}
+
 var ImgFigure = React.createClass({
 	// class ImgFigureComponent extends React.Component{
 	render(){
@@ -32,6 +37,13 @@ var ImgFigure = React.createClass({
 		//如果props属性中指定了这张图片的位置，则使用
 		if (this.props.arrange.pos) {
 			styleObj = this.props.arrange.pos;
+		}
+
+		//如何图片有软砖角度且不为0，添加旋转角度
+		if (this.props.arrange.rotate) {
+			(['-moz-','-ms-','-webkit-','']).forEach((value => {
+				styleObj[value + 'transform'] = 'rotate('+this.props.arrange.rotate + 'deg)';
+			}).bind(this));
 		}
 
 		return (
@@ -87,6 +99,9 @@ class AppComponent extends React.Component {
 			//首先居中 centerIndex 的图片
 			imgsArrangeCenterArr[0].pos = centerPos;
 
+			//centerIndex 的图片不用旋转
+			imgsArrangeCenterArr[0].rotate = 0;
+
 			//取出要布局上侧图片的状态信息???????
 			topImgSpliceIndex = Math.ceil(Math.random() *(imgsArrangeArr.length - topImgNum));
 			imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIndex,topImgNum);
@@ -97,7 +112,8 @@ class AppComponent extends React.Component {
 					pos:{
 						left:getRangeRandom(vPosRangeX[0],vPosRangeX[1]),
 						top:getRangeRandom(vPosRangeTopY[0],vPosRangeTopY[1])
-					}
+					},
+					rotate:get30DegRandom()
 				};
 			});
 
@@ -116,7 +132,8 @@ class AppComponent extends React.Component {
 					pos:{
 						left:getRangeRandom(hPosRangeLORX[0],hPosRangeLORX[1]),
 						top:getRangeRandom(hPosRangeY[0],hPosRangeY[1])
-					}
+					},
+					rotate:get30DegRandom()
 				}
 			}
 
@@ -217,7 +234,8 @@ class AppComponent extends React.Component {
 	    			pos:{
 	    				left:'0',
 		    			top:'0'
-	    			}
+	    			},
+	    			rotate: 0
 	    		}
     		}
     		//在遍历或者循环输出去渲染子组件的时候，key必不可少
