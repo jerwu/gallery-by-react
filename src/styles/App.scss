@@ -40,9 +40,12 @@ html,body{
       background-color: #fff;
 
       box-sizing: border-box;
-
+      transform-style: preserve-3d;
       cursor: pointer;
-      z-index: 11;
+
+      &.is-inverse{
+        transform: rotateY(180deg);
+      }
     }
     
     figCaption{

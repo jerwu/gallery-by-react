@@ -33,7 +33,7 @@ class ImgFigureComponent extends React.Component{
 
 	//imgFigure的点击处理函数
 	handleClick(ev){
-		
+		alert();
 		if (this.props.arrange.isCenter) {
 			this.props.inverse();
 		}else{
@@ -66,7 +66,7 @@ class ImgFigureComponent extends React.Component{
 		}
 
 		let imgFigureClassName = 'img-figure';
-		imgFigureClassName += this.props.arrange.isInverse ? ' isInverse' : '';
+		imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
 
 
 		return (
@@ -182,6 +182,7 @@ class AppComponent extends React.Component {
 			});
 	}
 
+	//闭包this问题
 	center(index){
 		return (() =>{this.reArrange(index)}).bind(this);
 	}
@@ -240,8 +241,9 @@ class AppComponent extends React.Component {
 	 *@return {function} 返回一个闭包函数，其内return一个真正待被执行的函数
 	 ?????：搞清楚为什么使用闭包（图片翻转课程05；55）
 	*/
+	//闭包this问题：说return is not defined；
 	inverse(index){
-		retrun (()=>{
+		retrun ((()=>{
 			var imgsArrangeArr = this.state.imgsArrangeArr;
 
 			imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
@@ -249,7 +251,7 @@ class AppComponent extends React.Component {
 			this.setState({
 				imgsArrangeArr:imgsArrangeArr
 			});
-		}).bind(this);
+		}).bind(this));
 	}
 
 	//组件加载之后，为每张图片计算其位置的范围
