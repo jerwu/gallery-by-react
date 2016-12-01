@@ -28,11 +28,25 @@ function get30DegRandom(){
 	return ((Math.random() > 0.5 ? '' : '') + Math.ceil(Math.random() * 30));
 }
 
-var ImgFigure = React.createClass({
-	// class ImgFigureComponent extends React.Component{
+// var ImgFigure = React.createClass({
+class ImgFigureComponent extends React.Component{
+
+	//imgFigure的点击处理函数
+	handleClick(ev){
+		
+		if (this.props.arrange.isCenter) {
+			this.props.inverse();
+		}else{
+			this.props.center();
+		}
+
+		ev.preventDefault();
+		ev.stopPropagation();
+	}
+
 	render(){
 
-		var styleObj = {};
+		let styleObj = {};
 
 		//如果props属性中指定了这张图片的位置，则使用
 		if (this.props.arrange.pos) {
@@ -46,20 +60,38 @@ var ImgFigure = React.createClass({
 			}).bind(this));
 		}
 
+		//把中心图片的zindex设成11
+		if (this.props.center) {
+			styleObj.zIndex = 11;
+		}
+
+		let imgFigureClassName = 'img-figure';
+		imgFigureClassName += this.props.arrange.isInverse ? ' isInverse' : '';
+
+
 		return (
-			<figure className="img-figure" style={styleObj}>
+			<figure className={imgFigureClassName}
+					style={styleObj}
+					onClick={this.handleClick}
+					>
 				<img src={this.props.data.imageURL}
-						alt={this.props.data.title}
-				/>
+						alt={this.props.data.title}/>
 				<figcaption>
 					<h2 className="img-title">{this.props.data.title}</h2>
+					<div className="img-back" onClick={this.handleClick}>
+						<p>
+							{this.props.data.desc}
+						</p>
+					</div>
 				</figcaption>
 			</figure>
 		);
 	}
-})
+}
+// })
 
 class AppComponent extends React.Component {
+	//因为react版本太高，要使用支持es6语法把下面属性定义到app类的构造函数中
 	// Constant:{
 	// 	centerPos:{
 	// 		left:0,
@@ -96,11 +128,12 @@ class AppComponent extends React.Component {
 
 			imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex,1);
 
-			//首先居中 centerIndex 的图片
-			imgsArrangeCenterArr[0].pos = centerPos;
-
-			//centerIndex 的图片不用旋转
-			imgsArrangeCenterArr[0].rotate = 0;
+			//首先居中 centerIndex 的图片,centerIndex 的图片不用旋转
+			imgsArrangeCenterArr[0] = {
+				pos:centerPos,
+				rotate:0,
+				center:true
+			}
 
 			//取出要布局上侧图片的状态信息???????
 			topImgSpliceIndex = Math.ceil(Math.random() *(imgsArrangeArr.length - topImgNum));
@@ -113,7 +146,8 @@ class AppComponent extends React.Component {
 						left:getRangeRandom(vPosRangeX[0],vPosRangeX[1]),
 						top:getRangeRandom(vPosRangeTopY[0],vPosRangeTopY[1])
 					},
-					rotate:get30DegRandom()
+					rotate:get30DegRandom(),
+					isCenter:false
 				};
 			});
 
@@ -148,6 +182,9 @@ class AppComponent extends React.Component {
 			});
 	}
 
+	center(index){
+		return (() =>{this.reArrange(index)}).bind(this);
+	}
 	// getInitialState(){
 	// 	return {
 	// 		imgsArrangeArr:[
@@ -155,7 +192,10 @@ class AppComponent extends React.Component {
 	// 				pos:{
 	// 					left:'0',
 	// 					top:'0'
-	// 				}
+	// 				},
+	//				rotate: 0,			//图片旋转
+	//				isInverse: false	//图片翻转
+	//				isCenter:false
 	// 			}
 	// 		]
 	// 	}
@@ -181,8 +221,36 @@ class AppComponent extends React.Component {
 				topY:[0,0]
 			}
 		};
+		// this.inverse = function (){
+		// 	return function (){
+		// 		var imgsArrangeArr = this.state.imgsArrangeArr;
+
+		// 		imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+				
+		// 		this.setState({
+		// 			imgsArrangeArr:imgsArrangeArr
+		// 		});
+		// 	}.bind(this)
+		// }
 	}
 
+	/*
+	 *翻转图片
+	 *@params index 输出当前被执行inverse操作的图片在对应的图片信息数组中的index值
+	 *@return {function} 返回一个闭包函数，其内return一个真正待被执行的函数
+	 ?????：搞清楚为什么使用闭包（图片翻转课程05；55）
+	*/
+	inverse(index){
+		retrun (()=>{
+			var imgsArrangeArr = this.state.imgsArrangeArr;
+
+			imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+			
+			this.setState({
+				imgsArrangeArr:imgsArrangeArr
+			});
+		}).bind(this);
+	}
 
 	//组件加载之后，为每张图片计算其位置的范围
 	componentDidMount(){
@@ -235,11 +303,19 @@ class AppComponent extends React.Component {
 	    				left:'0',
 		    			top:'0'
 	    			},
-	    			rotate: 0
+	    			rotate: 0,
+	    			isInverse: false,
+	    			isCenter: false
 	    		}
     		}
     		//在遍历或者循环输出去渲染子组件的时候，key必不可少
-    		imgFigures.push(<ImgFigure key={index} data={value} ref={'imgFigure'+index} arrange={this.state.imgsArrangeArr[index]}/>)
+    		imgFigures.push(<ImgFigureComponent key={index}
+    									data={value}
+    									ref={'imgFigure'+index}
+    									arrange={this.state.imgsArrangeArr[index]}
+    									inverse={this.inverse(index)}
+    									center={this.center(index)}
+    									/>)
     	}).bind(this));
 
   //   imageDatas.forEach(function(value,index){
