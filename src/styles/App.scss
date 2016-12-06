@@ -100,56 +100,54 @@ html,body{
 /*image -- end*/
 
 /*controller -- start*/
-.constoller-nav{
+.controller-nav{
   position: absolute;
   left: 0;
-  bottom: 30px;
+  bottom: 100px;
   z-index: 101;
-  border:1px solid black;
-  background-color: #000;
 
   width: 100%;
 
   text-align: center;
 
-  @at-root{
-    .controller-unit{
+  @at-root {
+    .controller-unit {
       display: inline-block;
       margin: 0 5px;
-      width: 30px; 
+      width: 30px;
       height: 30px;
 
       text-align: center;
       vertical-align: middle;
 
-      border-radius: 50%;
       cursor: pointer;
       background-color: #aaa;
+      border-radius: 50%;
 
-      transform:scale(.5);
-      transition: transform 0.6s ease-in-out,background-color 0.3s;
+      transform: scale(.5);
+      transition: transform .6s ease-in-out, background-color .3s;
 
-      &.is-center{
+      &.is-center {
         background-color: #888;
 
         transform: scale(1);
 
-        &::after{
-          color:#fff;
-          font-family: "icons-turn-arrow";
-          font-size:80%;
-          line-height: 30px;
+        &::after {
+            color: #fff;
+            font-family: "icons-turn-arrow";
+            font-size: 80%;
+            line-height: 30px;
 
-          content: "\e600";
+            content: "\e600";
 
-          -webkit-font-smoothing:antialiased;
-          -moz-osx-font-smoothing:grayscale;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        &.is-inverse{
-          background-color: #555;
+        &.is-inverse {
+            background-color: #555;
 
-          transform: rotateY(180deg);
+            transform: rotateY(180deg);
         }
       }
     }
