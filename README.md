@@ -1,7 +1,9 @@
 # gallery-by-react
 one photo gallery project based on react.
 
-![propject's fullPic](https://github.com/jerwu/gallery-by-react/tree/master/src/images/react_fullpic.png)
+![project's fullPic](https://github.com/jerwu/gallery-by-react/blob/master/src/images/react_fullpic.png)
+
+**项目没有还没有做优化的工作，所以第一次打开网页的时候加载需要一些时间，请耐心等待哟。**
 
 这是一个用reactjs架构的一个画廊应用，是慕课网《react实战》视频教程的项目实践。
 
